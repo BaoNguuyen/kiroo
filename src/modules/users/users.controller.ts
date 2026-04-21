@@ -7,8 +7,10 @@ import {
   Param,
   Delete,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiBearerAuth, ApiResponse } from '@nestjs/swagger';
+import { CacheInterceptor, CacheTTL } from '@nestjs/cache-manager';
 
 import { UsersService } from './users.service';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -27,6 +29,8 @@ export class UsersController {
 
   @Get()
   @Roles(Role.ADMIN)
+  @UseInterceptors(CacheInterceptor)
+  @CacheTTL(300) // Cache for 5 minutes
   @ApiOperation({ summary: 'Get all users (Admin only)' })
   @ApiResponse({ status: 200, description: 'Return all users' })
   findAll() {
@@ -34,6 +38,8 @@ export class UsersController {
   }
 
   @Get('me')
+  @UseInterceptors(CacheInterceptor)
+  @CacheTTL(60) // Cache for 1 minute
   @ApiOperation({ summary: 'Get current user profile' })
   @ApiResponse({ status: 200, description: 'Return current user' })
   getProfile(@CurrentUser('id') userId: string) {
@@ -41,6 +47,8 @@ export class UsersController {
   }
 
   @Get(':id')
+  @UseInterceptors(CacheInterceptor)
+  @CacheTTL(300) // Cache for 5 minutes
   @ApiOperation({ summary: 'Get user by ID' })
   @ApiResponse({ status: 200, description: 'Return user' })
   @ApiResponse({ status: 404, description: 'User not found' })

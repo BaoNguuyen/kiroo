@@ -62,6 +62,12 @@
 - ✅ Request logging
 - ✅ Performance monitoring ready
 
+### ⚡ Caching & Performance
+- ✅ Redis caching (Upstash)
+- ✅ Automatic cache invalidation
+- ✅ In-memory fallback
+- ✅ Configurable TTL
+
 ## 📋 Yêu cầu
 
 - Node.js >= 18.x

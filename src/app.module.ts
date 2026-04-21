@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { ThrottlerModule } from '@nestjs/throttler';
+import { CacheModule } from '@nestjs/cache-manager';
 import { APP_GUARD } from '@nestjs/core';
 import { ThrottlerGuard } from '@nestjs/throttler';
 
@@ -11,6 +12,7 @@ import { PostsModule } from './modules/posts/posts.module';
 import { HealthModule } from './modules/health/health.module';
 
 import { validate } from './config/env.validation';
+import { RedisConfigService } from './config/redis.config';
 
 @Module({
   imports: [
@@ -19,6 +21,12 @@ import { validate } from './config/env.validation';
       isGlobal: true,
       validate,
       envFilePath: '.env',
+    }),
+
+    // Redis Cache
+    CacheModule.registerAsync({
+      isGlobal: true,
+      useClass: RedisConfigService,
     }),
 
     // Rate limiting
